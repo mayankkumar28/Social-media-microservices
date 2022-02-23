@@ -1,0 +1,5 @@
+firstName,lastName,userId,password,phone,isAdmin
+admin,1,admin@admin.com,admin,1236,true
+user,1,user1@user.com,user1,1234,false
+user,2,user2@user.com,user2,12345,false
+user,3,user3@user.com,user3,123456,false

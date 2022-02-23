@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.token;
+  const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-      if (err) res.status(403).json("Token is not valid!");
+      if (err) {
+        console.log(err);
+        res.status(403).json("Token is not valid!");
+      }
       req.user = user;
       next();
     });
@@ -17,10 +19,10 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.email === req.body.email || req.user.isAdmin) {
+    if (req.user.userId === req.body.userId || req.user.isAdmin) {
       next();
     } else {
-      res.status(403).json("User doesn't have necessary permissions!");
+      res.status(403).json("Wrong credentials!");
     }
   });
 };
