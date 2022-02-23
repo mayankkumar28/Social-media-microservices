@@ -1,8 +1,4 @@
 const User = require("../models/User");
-const {
-  verifyTokenAndAuthorization,
-  verifyTokenAndAdmin,
-} = require("../../utility/verifyToken");
 const jwt = require("jsonwebtoken");
 const CryptoJS = require("crypto-js");
 const router = require("express").Router();
@@ -59,16 +55,16 @@ router.post("/login", async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SEC,
-      { expiresIn: "99d" }
+      { expiresIn: "2d" }
     );
-    res.status(200).json(accessToken);
+    res.status(200).json({ "Auth token:": accessToken });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 //UPDATE USER DETAILS
-router.put("/update", verifyTokenAndAuthorization, async (req, res) => {
+router.put("/update", async (req, res) => {
   if (req.body.password) {
     req.body.password = CryptoJS.AES.encrypt(
       req.body.password,
@@ -97,23 +93,19 @@ router.put("/update", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //DELETE USER
-router.delete(
-  "/delete/:userId",
-  verifyTokenAndAuthorization,
-  async (req, res) => {
-    try {
-      const user = await User.findOne({ userId: req.params.userId });
-      if (!user) return res.status(401).json("Incorrect userId!");
-      await User.findByIdAndDelete(user._id);
-      res.status(200).json("User has been deleted");
-    } catch (err) {
-      res.status(500).json(err);
-    }
+router.delete("/delete/:userId", async (req, res) => {
+  try {
+    const user = await User.findOne({ userId: req.params.userId });
+    if (!user) return res.status(401).json("Incorrect userId!");
+    await User.findByIdAndDelete(user._id);
+    res.status(200).json("User has been deleted");
+  } catch (err) {
+    res.status(500).json(err);
   }
-);
+});
 
 //FIND AND GET USER DETAILS
-router.put("/find/:userId", verifyTokenAndAdmin, async (req, res) => {
+router.get("/find/:userId", async (req, res) => {
   try {
     const user = await User.findOne({ userId: req.params.userId });
     if (!user) return res.status(401).json("Cannot find userId!");

@@ -3,9 +3,6 @@ const Content = require("../models/Content");
 const csv = require("csvtojson");
 const fs = require("fs");
 const path = require("path");
-const { verifyTokenAndAuthorization } = require("../../utility/verifyToken");
-const expressjwt = require("express-jwt");
-const jwtCheck = expressjwt({ secret: "test", algorithms: ["HS256"] });
 
 //DATA INGESTION TO DB
 router.post("/test/:filename", async (req, res) => {
@@ -31,7 +28,7 @@ router.post("/test/:filename", async (req, res) => {
 });
 
 //POST CONTENT
-router.post("/post", verifyTokenAndAuthorization, async (req, res) => {
+router.post("/post", async (req, res) => {
   const content = new Content({
     title: req.body.title,
     story: req.body.story,
@@ -47,7 +44,7 @@ router.post("/post", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //UPDATE CONTENT
-router.put("/update/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.put("/update/:id", async (req, res) => {
   try {
     const content = await User.findOne({ _id: req.params.id });
     if (!content) return res.status(404).json("Incorrect content id!");
@@ -67,7 +64,7 @@ router.put("/update/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //DELETE CONTENT
-router.delete("/delete/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const content = await Content.findOne({ _id: req.params.id });
     if (!content) return res.status(404).json("Incorrect content id!");
@@ -127,15 +124,12 @@ router.put("/updateLikes", async (req, res) => {
 //UPDATE READS
 router.put("/updateReads", async (req, res) => {
   const contentId = req.headers.id;
-  console.log(contentId);
   try {
     const update = await Content.findOne({ _id: contentId });
-
     if (!update) return res.status(404).json("Incorrect content id!");
     await Content.updateOne({ _id: contentId }, { $inc: { reads: 1 } });
     res.status(200).json("Read");
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 });

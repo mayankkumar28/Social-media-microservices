@@ -1,23 +1,21 @@
 const router = require("express").Router();
 const Interaction = require("../models/Interaction");
 const { updateLike, updateRead } = require("./contentInteraction.js");
-const { verifyTokenAndAuthorization } = require("../../utility/verifyToken");
 
 //LIKE CONTENT
-router.post("/like/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.post("/like/:id", async (req, res) => {
   try {
     const interaction = await Interaction.findOne({ userId: req.body.userId });
     if (interaction) {
       if (interaction.likedContents.includes(req.params.id)) {
-        return res.status(400).json("Content already liked!");
+        return res.status(409).json("Content already liked!");
       }
       const response = await updateLike(req.params.id);
       if (response.status === 200) {
         await interaction.likedContents.push(req.params.id);
         await interaction.save();
-        return res.status(200).json("Content liked!");
+        return res.status(200).json("Content liked successfully!");
       }
-      //console.log(response);
       return res.status(response.status).json("Invalid content id!");
     } else {
       const newInteraction = new Interaction({
@@ -27,9 +25,8 @@ router.post("/like/:id", verifyTokenAndAuthorization, async (req, res) => {
       const response = await updateLike(req.params.id);
       if (response.status === 200) {
         await newInteraction.save();
-        return res.status(200).json("Content liked!");
+        return res.status(200).json("Content liked successfully!");
       }
-      console.log("response");
       return res.status(response.status).json(response.message);
     }
   } catch (error) {
@@ -38,18 +35,18 @@ router.post("/like/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //READ CONTENT
-router.post("/read/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.post("/read/:id", async (req, res) => {
   try {
     const interaction = await Interaction.findOne({ userId: req.body.userId });
     if (interaction) {
       if (interaction.readContents.includes(req.params.id)) {
-        return res.status(400).json("Content already read!");
+        return res.status(409).json("Content already read!");
       }
       const response = await updateRead(req.params.id);
       if (response.status === 200) {
         await interaction.readContents.push(req.params.id);
         await interaction.save();
-        return res.status(200).json("Content read!");
+        return res.status(200).json("Content read successfully");
       }
       return res.status(response.status).json(response.message);
     } else {
@@ -60,12 +57,11 @@ router.post("/read/:id", verifyTokenAndAuthorization, async (req, res) => {
       const response = await updateRead(req.params.id);
       if (response.status === 200) {
         await newInteraction.save();
-        return res.status(200).json("Content read!");
+        return res.status(200).json("Content read successfully");
       }
       return res.status(response.status).json(response.message);
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 });
