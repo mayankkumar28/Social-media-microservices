@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db/
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
+
+  api-gateway:
+    build: ./apiGateway
+    environment:
+      - JWT_SEC=test
+      - USER_SERVICE_URL=http://users-service:3001
+      - USER_INTERACTIONSERVICE_URL=http://user-interaction-service:3003
+      - CONTENT_SERVICE_URL=http://content-service:3002
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+      - mongo-express
+      - content-service
+      - user-service
+      - user-interaction-service
+
+  content-service:
+    build: ./contentService
+    ports:
+      - 3002:3002
+    depends_on:
+      - mongo
+      - mongo-express
+      - user-service
+
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/contentServiceDB
+
+  user-interaction-service:
+    build: ./userInteractionService
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongo
+      - mongo-express
+      - content-service
+      - user-service
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/userInteractionServiceDB
+      - LIKESPATH=http://content-service:3002/content/updateLikes
+      - READPATH=http://content-service:3002/content/updateReads
+
+  users-service:
+    build: ./userService
+    ports:
+      - 3001:3001
+    depends_on:
+      - mongo
+      - mongo-express
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/userServiceDB
+      - PASS_SEC = test
+      - JWT_SEC = test
+
+volumes:
+  mongodb:

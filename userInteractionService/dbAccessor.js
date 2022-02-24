@@ -4,10 +4,10 @@ const Interaction = require("./models/Interaction");
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
-    console.log("Connected to contentServiceDB");
+    console.log("Connected to userInteractionServiceDB");
   })
   .catch((err) => {
-    console.log("Error connecting to contentServiceDB: ", err);
+    console.log("Error connecting to userInteractionServiceDB: ", err);
   });
 
 const findUser = async (data) => {
