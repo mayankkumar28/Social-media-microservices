@@ -5,7 +5,7 @@ const ROUTES = [
     url: "/user/login",
     auth: false,
     proxy: {
-      target: "http://localhost:3001",
+      target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -14,7 +14,7 @@ const ROUTES = [
     url: "/user/register",
     auth: false,
     proxy: {
-      target: "http://localhost:3001",
+      target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -23,7 +23,7 @@ const ROUTES = [
     url: "/user/update",
     auth: true,
     proxy: {
-      target: "http://localhost:3001",
+      target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -32,7 +32,7 @@ const ROUTES = [
     url: "/user/delete/:id",
     auth: true,
     proxy: {
-      target: "http://localhost:3001",
+      target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -41,7 +41,7 @@ const ROUTES = [
     url: "/user/find/:id",
     auth: "admin",
     proxy: {
-      target: "http://localhost:3001",
+      target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -50,7 +50,7 @@ const ROUTES = [
     url: "/user/test/:filename",
     auth: false,
     proxy: {
-      target: "http://localhost:3001",
+      target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -59,7 +59,7 @@ const ROUTES = [
     url: "/content/post",
     auth: true,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -68,7 +68,7 @@ const ROUTES = [
     url: "/content/mostRead",
     auth: false,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -77,7 +77,7 @@ const ROUTES = [
     url: "/content/mostLiked",
     auth: false,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -86,7 +86,7 @@ const ROUTES = [
     url: "/content/test/:filename",
     auth: false,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -95,7 +95,7 @@ const ROUTES = [
     url: "/content/update/:id",
     auth: true,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -104,7 +104,7 @@ const ROUTES = [
     url: "/content/delete/:id",
     auth: true,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -113,7 +113,16 @@ const ROUTES = [
     url: "/content/recent",
     auth: false,
     proxy: {
-      target: "http://localhost:3002",
+      target: process.env.CONTENT_SERVICE_URL,
+      changeOrigin: true,
+      onProxyReq: fixRequestBody,
+    },
+  },
+  {
+    url: "/content/findByAuthor/:userId",
+    auth: false,
+    proxy: {
+      target: process.env.CONTENT_SERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -122,7 +131,7 @@ const ROUTES = [
     url: "/interaction/read/:id",
     auth: true,
     proxy: {
-      target: "http://localhost:3003",
+      target: process.env.USER_INTERACTIONSERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },
@@ -131,7 +140,7 @@ const ROUTES = [
     url: "/interaction/like/:id",
     auth: true,
     proxy: {
-      target: "http://localhost:3003",
+      target: process.env.USER_INTERACTIONSERVICE_URL,
       changeOrigin: true,
       onProxyReq: fixRequestBody,
     },

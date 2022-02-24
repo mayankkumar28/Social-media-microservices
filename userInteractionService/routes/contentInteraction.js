@@ -2,7 +2,7 @@ const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const updateLike = async (contentId) => {
-  const response = await fetch("http://localhost:3002/content/updateLikes", {
+  const response = await fetch(process.env.LIKESPATH, {
     method: "PUT",
     headers: {
       id: contentId,
@@ -12,7 +12,7 @@ const updateLike = async (contentId) => {
 };
 
 const updateRead = async (contentId) => {
-  const response = await fetch("http://localhost:3002/content/updateReads", {
+  const response = await fetch(process.env.READPATH, {
     method: "PUT",
     headers: {
       id: contentId,

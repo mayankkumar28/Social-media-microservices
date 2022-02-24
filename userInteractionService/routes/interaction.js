@@ -1,33 +1,34 @@
 const router = require("express").Router();
-const Interaction = require("../models/Interaction");
 const { updateLike, updateRead } = require("./contentInteraction.js");
+const {
+  findUser,
+  saveLike,
+  saveFirstInteraction,
+  saveRead,
+} = require("../dbAccessor.js");
 
 //LIKE CONTENT
 router.post("/like/:id", async (req, res) => {
+  const data = req.body;
   try {
-    const interaction = await Interaction.findOne({ userId: req.body.userId });
-    if (interaction) {
-      if (interaction.likedContents.includes(req.params.id)) {
+    const user = await findUser(data);
+    if (user) {
+      if (user.likedContents.includes(req.params.id)) {
         return res.status(409).json("Content already liked!");
       }
       const response = await updateLike(req.params.id);
       if (response.status === 200) {
-        await interaction.likedContents.push(req.params.id);
-        await interaction.save();
+        await saveLike(user, req.params.id);
         return res.status(200).json("Content liked successfully!");
       }
-      return res.status(response.status).json("Invalid content id!");
+      return res.status(400).json("Invalid content id!");
     } else {
-      const newInteraction = new Interaction({
-        userId: req.body.userId,
-        likedContents: req.params.id,
-      });
       const response = await updateLike(req.params.id);
       if (response.status === 200) {
-        await newInteraction.save();
+        await saveFirstInteraction(data, req.params.id, "like");
         return res.status(200).json("Content liked successfully!");
       }
-      return res.status(response.status).json(response.message);
+      return res.status(400).json("Invalid content id!");
     }
   } catch (error) {
     res.status(500).json(error);
@@ -36,30 +37,26 @@ router.post("/like/:id", async (req, res) => {
 
 //READ CONTENT
 router.post("/read/:id", async (req, res) => {
+  const data = req.body;
   try {
-    const interaction = await Interaction.findOne({ userId: req.body.userId });
-    if (interaction) {
-      if (interaction.readContents.includes(req.params.id)) {
+    const user = await findUser(data);
+    if (user) {
+      if (user.readContents.includes(req.params.id)) {
         return res.status(409).json("Content already read!");
       }
       const response = await updateRead(req.params.id);
       if (response.status === 200) {
-        await interaction.readContents.push(req.params.id);
-        await interaction.save();
-        return res.status(200).json("Content read successfully");
+        await saveRead(user, req.params.id);
+        return res.status(200).json("Content read successfully!");
       }
-      return res.status(response.status).json(response.message);
+      return res.status(400).json("Invalid content id!");
     } else {
-      const newInteraction = new Interaction({
-        userId: req.body.userId,
-        readContents: req.params.id,
-      });
       const response = await updateRead(req.params.id);
       if (response.status === 200) {
-        await newInteraction.save();
-        return res.status(200).json("Content read successfully");
+        await saveFirstInteraction(data, req.params.id, "read");
+        return res.status(200).json("Content read successfully!");
       }
-      return res.status(response.status).json(response.message);
+      return res.status(400).json("Invalid content id!");
     }
   } catch (error) {
     res.status(500).json(error);
