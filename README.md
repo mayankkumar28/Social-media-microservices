@@ -1,10 +1,72 @@
-# backendAssignment
+## Microservice Assignment
 
-## Installation
+## About The Project
 
-Run the following commands for docker
+The project contains three microservices and a api gateway to handle all incoming requests -
 
-```sh
-docker-compose up --build //to start docker
-docker-compose down       //to close docker
-```
+- User Service
+- User Interaction Service
+- Content Service
+
+The database used is mongo db.
+
+### Built With
+
+[Node.js](https://nodejs.org/en/) [Express.js](https://expressjs.com/) [Mongo db](https://www.mongodb.com/) [Docker](https://www.docker.com/)
+
+## Documentation
+
+#### Postman API Documentation:
+
+https://documenter.getpostman.com/view/18897300/UVkpPbfN
+
+#### You can import the Postman collection into your postman :
+
+In Your Postman, go to Import -> Link -> copy & paste the below link:
+https://www.postman.com/collections/1760eff4fc45ada7edf6
+
+## Getting started
+
+### Prerequisites
+
+Should have docker installed and running.
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/mayankkumar28/backendAssignment.git
+   ```
+2. Run docker
+   ```sh
+   docker-compose up --build
+   ```
+3. The mongo database can be viewd at http://localhost:8081/
+4. The database is empty for the first run, you can ingest data to db from csv files located in test folders.Use the UPLOAD CSV request in the postman collection for data ingestion.
+5. To make requests, use the Postman collection. The API documentation is included in the repo.
+6. To Stop docker
+   ```sh
+   docker-compose down
+   ```
+   > _Everything has been dockerized and smoothly runs on docker. If you don't want to use Docker, simply perform the `npm install` and `npm start` instructions in each of the three services and api gateway folders. You'll also need to make.env files for each one._
+
+## Working
+
+### Sequence Diagram
+
+![Sequence Diagram](/docs/sequenceDiagram.png)
+
+### Flowchart
+
+![Flowchart](/docs/flowchart.png)
+
+### Database Schema
+
+![Schema](/docs/schema.png)
+
+> **_NOTE: Admin Users (with isAdmin field =true) can perform any operation on behalf of any user._**
+
+## Limitations
+
+- The api gateway is employing proxy to redirect requests to other microservices, which is suitable given the scale of this project. A more robust gateway is required for real-world projects.
+- userId is currrently being considered as a unique string that identifies a user (generally email). There can be a check to verify the format of email-ids in future.
