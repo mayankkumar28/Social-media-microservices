@@ -2,7 +2,7 @@
 
 ## About The Project
 
-The project contains three microservices and a api gateway to handle all incoming requests -
+The project contains three microservices and an api gateway to handle all incoming requests -
 
 - User Service
 - User Interaction Service
@@ -37,13 +37,13 @@ Should have docker installed and running.
    ```sh
    git clone https://github.com/mayankkumar28/backendAssignment.git
    ```
-2. Run docker
+2. Run docker compose
    ```sh
    docker-compose up --build
    ```
-3. The mongo database can be viewd at http://localhost:8081/
+3. The mongo database can be viewed at ***http://localhost:8081/***
 4. The database is empty for the first run, you can ingest data to db from csv files located in test folders.Use the UPLOAD CSV request in the postman collection for data ingestion.
-5. To make requests, use the Postman collection. The API documentation is included in the repo.
+5. To make requests, use the [Postman collection](https://www.postman.com/collections/1760eff4fc45ada7edf6). (Import link in your postman)
 6. To Stop docker
    ```sh
    docker-compose down
