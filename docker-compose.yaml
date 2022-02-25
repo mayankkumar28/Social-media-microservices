@@ -70,7 +70,6 @@ services:
       - MONGO_URL=mongodb://mongo:27017/userServiceDB
       - PASS_SEC = test
       - JWT_SEC = test
-      - PASS_SEC = test
 
 volumes:
   mongodb:
