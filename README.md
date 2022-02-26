@@ -2,7 +2,7 @@
 
 ## About The Project
 
-The project contains three microservices and an api gateway to handle all incoming requests -
+The project contains three microservices and an api gateway to proxy all the incoming requests and outgoing responses -
 
 - User Service
 - User Interaction Service
@@ -52,13 +52,13 @@ Should have docker installed and running.
 
 ## Working
 
-### Sequence Diagram
-
-![Sequence Diagram](/docs/sequenceDiagram.png)
-
-### Flowchart
+### Request flowchart
 
 ![Flowchart](/docs/flowchart.png)
+
+### Sequence Diagram (Overview)
+
+![Sequence Diagram](/docs/sequenceDiagram.png)
 
 ### Database Schema
 
@@ -68,5 +68,6 @@ Should have docker installed and running.
 
 ## Limitations
 
-- The api gateway is employing proxy to redirect requests to other microservices, which is suitable given the scale of this project. A more robust gateway is required for real-world projects.
+- The api gateway is employing proxy to redirect requests to other microservices, which is suitable given the scale of this project. A more robust gateway and load balancer is required for real-world projects.
 - userId is currrently being considered as a unique string that identifies a user (generally email). There can be a check to verify the format of email-ids in future.
+- As the system scales, the speed and size of interactions service will be limited by array of likedContents and readContents. To solve this problem, we can change the schema of this service : {userId : String, contentId: String, isRead:Boolean, isLiked : Boolean}.
