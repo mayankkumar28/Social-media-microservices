@@ -57,6 +57,7 @@ Should have docker installed and running.
 ![Flowchart](/docs/flowchart.png)
 
 ### Sequence Diagram (Overview)
+> Db Accessor (and db itself) is different for all microservices.
 
 ![Sequence Diagram](/docs/sequenceDiagram.png)
 
