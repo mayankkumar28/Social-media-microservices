@@ -1,4 +1,4 @@
-## Microservice Assignment
+## Microservices project for social media
 
 ## About The Project
 
